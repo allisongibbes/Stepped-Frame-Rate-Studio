@@ -1,0 +1,106 @@
+<style>
+  .fps-widget {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background-color: #f4f6f8;
+    text-align: center;
+  }
+  .stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #111;
+    border: 2px solid #444;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .controls-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  .fps-btn {
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .fps-btn:hover { background-color: #e3f2fd; }
+  .fps-btn.active { background-color: #e91e63; color: white; border-color: #c2185b; }
+  .desc-box {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    color: #333;
+    text-align: left;
+  }
+
+  /* Animations */
+  .smooth-motion { animation: moveObject 1.5s infinite alternate ease-in-out; }
+  .stepped-motion { animation: moveObject 1.5s infinite alternate steps(6, end); }
+
+  @keyframes moveObject {
+    0% { transform: translateX(-200px); }
+    100% { transform: translateX(200px); }
+  }
+</style>
+
+<div class="fps-widget">
+  <h2>Stepped Animation vs. Smooth Interpolation Studio</h2>
+  <p>Compare standard smooth computer movement against stepped animation ("on twos"), which mimics the staccato rhythm of traditional hand-drawn and stop-motion media.</p>
+
+  <div class="stage">
+    <div id="movingBox" class="smooth-motion">
+      <svg width="80" height="80" viewBox="0 0 80 80">
+        <rect width="80" height="80" rx="16" fill="#e91e63"/>
+        <circle cx="25" cy="30" r="8" fill="#fff"/>
+        <circle cx="55" cy="30" r="8" fill="#fff"/>
+        <circle cx="27" cy="30" r="3" fill="#000"/>
+        <circle cx="57" cy="30" r="3" fill="#000"/>
+        <path d="M 25 55 Q 40 40 55 55" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="controls-grid">
+    <button class="fps-btn active" onclick="setFPS('smooth', this)">Smooth CGI ("On Ones" - 24fps)</button>
+    <button class="fps-btn" onclick="setFPS('stepped', this)">Stepped Style ("On Twos" - 12fps)</button>
+  </div>
+
+  <div class="desc-box" id="fpsDesc">
+    <strong>Smooth CGI ("On Ones"):</strong> Standard computer rendering interpolates every fraction of a movement. While fluid, it can sometimes feel overly clinical, slick, or weightless.
+  </div>
+</div>
+
+<script>
+  const box = document.getElementById('movingBox');
+  const descBox = document.getElementById('fpsDesc');
+
+  function setFPS(mode, btn) {
+    document.querySelectorAll('.fps-widget .fps-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    if (mode === 'smooth') {
+      box.className = "smooth-motion";
+      descBox.innerHTML = "<strong>Smooth CGI (\"On Ones\"):</strong> The computer continuously updates position across every single frame. This creates ultra-smooth motion, but sacrifices the tactile, hand-crafted rhythm of traditional media.";
+    } else {
+      box.className = "stepped-motion";
+      descBox.innerHTML = "<strong>Stepped Animation (\"On Twos\"):</strong> The character holds poses across multiple frames (dropping effective frame rate). This creates staccato, rhythmic bursts that give digital models a handmade, stop-motion weight.";
+    }
+  }
+</script>
